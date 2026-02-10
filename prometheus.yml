@@ -1,0 +1,5 @@
+scrape_configs:
+  - job_name: 'kotlin-monitor'
+    static_configs:
+      - targets: [ 'monitor-service:8080' ]
+    metrics_path: /api/metrics/prometheus
