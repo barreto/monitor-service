@@ -1,5 +1,6 @@
 package com.example.monitor.controllers
 
+import com.example.monitor.dtos.MetricFamily
 import com.example.monitor.services.PrometheusService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -17,6 +18,11 @@ final class MetricsController(private val prometheusService: PrometheusService) 
     @GetMapping("/prometheus", produces = [MediaType.TEXT_PLAIN_VALUE])
     final fun prometheus(): String {
         return prometheusService.scrape()
+    }
+
+    @GetMapping("/prometheus/json", produces = [MediaType.APPLICATION_JSON_VALUE])
+    final fun prometheusJson(): ResponseEntity<List<MetricFamily>> {
+        return ResponseEntity.ok(prometheusService.scrapeAsJson())
     }
 
     @GetMapping("/current", produces = [MediaType.TEXT_PLAIN_VALUE])
