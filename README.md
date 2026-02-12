@@ -46,7 +46,7 @@ Build e subida (reconstrói a imagem e recria containers):
 Build e subida apenas com requisitos para execução local:
 
 ```shell
-  docker compose -f docker-compose.local.yml up --build --force-recreat
+  docker compose -f docker-compose.local.yml up --build --force-recreate
 ```
 
 Definir perfil "local" como ativo para o Spring através da seguinte VM Option:
