@@ -1,5 +1,6 @@
 scrape_configs:
   - job_name: 'kotlin-monitor-local'
+    scrape_interval: 1s
     static_configs:
       - targets: [ 'localhost:8080' ]
     metrics_path: /api/metrics/prometheus
