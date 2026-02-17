@@ -1,20 +1,15 @@
 # Monitor Service
 
-Serviço Kotlin + Spring Boot para exposição e consulta de métricas do sistema, pronto para rodar com Docker / Docker
-Compose e integrado com Prometheus.
+Kotlin + Spring Boot service for exposing and querying system metrics, ready to run with Docker / Docker Compose and integrated with Prometheus.
 
-## Visão geral
+## Overview
+- Exposes host metrics (CPU, memory, disks, and service metrics) in Prometheus-compatible format at `/api/metrics/prometheus`.
+- Queries Prometheus to provide REST endpoints:
+    - `GET /api/metrics/current` — current metrics (instant query).
+    - `GET /api/metrics/history` — historical metrics (range query).
+- Modular project using WebClient for Prometheus communication, Micrometer for metrics exposure, and configuration for running via Docker Compose.
 
-- Expõe métricas do host (CPU, memória, discos e métricas do serviço) em formato compatível com Prometheus em
-  `/api/metrics/prometheus`.
-- Consulta o Prometheus para fornecer endpoints REST:
-    - GET `/api/metrics/current` — métricas atuais (instant query).
-    - GET `/api/metrics/history` — histórico (range query).
-- Projeto modular, com WebClient para comunicação com Prometheus, Micrometer para exposição de métricas e configuração
-  para execução via Docker Compose.
-
-## Principais tecnologias
-
+## Key Technologies
 - Kotlin (JDK 17)
 - Spring Boot (Web + WebFlux)
 - Micrometer Prometheus
@@ -23,71 +18,73 @@ Compose e integrado com Prometheus.
 - Docker
 - Docker Compose
 
-## Como executar
+## How to Run
 
-### Pré-requisitos
+### Prerequisites
 
-- Docker e Docker Compose instalados.
-- Build local antes do docker-compose.
-```shell
+- Docker and Docker Compose installed.
+- Local build before running docker-compose:
+
+```bash
   mvn -DskipTests clean package
 ```
 
-### Execução com Docker Compose (recomendado)
+### Run with Docker Compose (recommended)
 
-Build e subida (reconstrói a imagem e recria containers): 
-
-```shell
+Build and start (rebuilds the image and recreates containers):
+```bash
   docker-compose up --build --force-recreate
 ```
 
-### Execução local
+### Run locally
 
-Build e subida apenas com requisitos para execução local:
+Build and start using local configuration:
 
-```shell
+```bash
   docker compose -f docker-compose.local.yml up --build --force-recreate
 ```
 
-Definir perfil "local" como ativo para o Spring através da seguinte VM Option:
-
-```text
-    -Dspring.profiles.active=local
+Activate the local profile in Spring with the following VM option:
+```plaintext
+  -Dspring.profiles.active=local
 ```
 
-## Endpoints e exemplos de uso
+## Endpoints and Usage Examples
 
-### 1. Exposição Prometheus
+### 1. Prometheus Exposure
 
-GET `/api/metrics/prometheus` — retorna texto no formato de scraping do Prometheus.
-```shell
-  curl http://localhost:8080/api/metrics/prometheus
+GET `/api/metrics/prometheus` — returns text in Prometheus scraping format.
+
+```bash
+curl http://localhost:8080/api/metrics/prometheus
 ```
 
 Output:
 ![Output endpoint prometheus](docs/output-prometheus.png)
 
-### 2. Métrica atual (instant query)
+### 2. Current Metrics (instant query)
 
-GET `/api/metrics/current` — retorna texto no formato de scraping do Prometheus.
-```shell
-  curl --request GET --url http://localhost:8080/api/metrics/current
+GET `/api/metrics/current` — returns current metrics.
+
+```bash
+curl --request GET --url http://localhost:8080/api/metrics/current
 ```
 
 Output:
 ![Output endpoint current](docs/output-current.png)
 
-### 3. Exposição Prometheus
+### 3. Historical Metrics (range query)
 
-GET `/api/metrics/http://localhost:8080/api/metrics/history` — retorna texto no formato de scraping do Prometheus.
-```shell
-  curl --request GET --url http://localhost:8080/api/metrics/current
+GET `/api/metrics/history` — returns historical metrics.
+
+```bash
+curl --request GET --url http://localhost:8080/api/metrics/history
 ```
 
 Output:
 ![Output endpoint history](docs/output-history.png)
 
-## Decisões de arquitetura
+## Architecture Decisions
 
-- WebClient (reactive) para chamadas não bloqueantes ao Prometheus.
-- Config via environment para facilitar deploy em diferentes ambientes (local/docker).
+- Reactive WebClient for non-blocking calls to Prometheus.
+- Environment-based configuration to simplify deployment across different environments (local/docker).
