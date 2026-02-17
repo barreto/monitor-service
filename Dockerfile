@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre-jammy
+FROM amazoncorretto:17-alpine
 
 ARG JAR_FILE=target/*.jar
 
