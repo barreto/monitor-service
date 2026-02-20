@@ -1,5 +1,6 @@
 package com.example.monitor.controllers
 
+import com.example.monitor.dtos.GetCurrentResponse
 import com.example.monitor.dtos.MetricFamily
 import com.example.monitor.services.PrometheusService
 import org.springframework.http.MediaType
@@ -28,7 +29,7 @@ final class MetricsController(private val prometheusService: PrometheusService) 
     @GetMapping("/current", produces = [MediaType.TEXT_PLAIN_VALUE])
     final fun current(
         @RequestParam(required = false, defaultValue = "up") type: String
-    ): Mono<ResponseEntity<String>> {
+    ): Mono<ResponseEntity<GetCurrentResponse>> {
         return prometheusService.queryInstant(type).map { ResponseEntity.ok(it) }
     }
 
