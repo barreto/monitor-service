@@ -1,5 +1,6 @@
 package com.example.monitor.services
 
+import com.example.monitor.dtos.GetCurrentResponse
 import com.example.monitor.dtos.MetricFamily
 import com.example.monitor.dtos.MetricSample
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
@@ -89,7 +90,7 @@ final class PrometheusService(
         return families.values.toList()
     }
 
-    final fun queryInstant(promql: String): Mono<String> {
+    final fun queryInstant(promql: String): Mono<GetCurrentResponse> {
         return webClient.get()
             .uri { uriBuilder ->
                 uriBuilder.path("/api/v1/query")
@@ -97,7 +98,7 @@ final class PrometheusService(
                     .build()
             }
             .retrieve()
-            .bodyToMono(String::class.java)
+            .bodyToMono(GetCurrentResponse::class.java)
     }
 
     final fun queryRange(promql: String, step: Duration): Mono<String> {
