@@ -37,7 +37,7 @@ final class MetricsController(private val prometheusService: PrometheusService) 
     final fun history(
         @RequestParam(required = false, defaultValue = "up") type: String,
         @RequestParam(required = false, defaultValue = "15") stepInSec: Long
-    ): Mono<ResponseEntity<String>> {
+    ): Mono<ResponseEntity<GetCurrentResponse>> {
         return prometheusService.queryRange(type, Duration.ofSeconds(stepInSec))
             .map { ResponseEntity.ok(it) }
     }

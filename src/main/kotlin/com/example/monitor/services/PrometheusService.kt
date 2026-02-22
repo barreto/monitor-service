@@ -101,7 +101,7 @@ final class PrometheusService(
             .bodyToMono(GetCurrentResponse::class.java)
     }
 
-    final fun queryRange(promql: String, step: Duration): Mono<String> {
+    final fun queryRange(promql: String, step: Duration): Mono<GetCurrentResponse> {
         val end = Instant.now()
         val start = end.minusSeconds(300)
 
@@ -115,6 +115,6 @@ final class PrometheusService(
                     .build()
             }
             .retrieve()
-            .bodyToMono(String::class.java)
+            .bodyToMono(GetCurrentResponse::class.java)
     }
 }
